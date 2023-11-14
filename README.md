@@ -6,6 +6,7 @@ Simple CAD designed using pygame. It is still a work in progress project, so if 
 ```
 clone the repository
 $ pip install -r requirements.txt
+$ python3.10 -m venv venv
 $ source venv/bin/activate
 $ python main.py
 ```
