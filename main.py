@@ -1,7 +1,6 @@
 import pygame
 from classes.canvas import Canvas
-
-FPS = 10
+from constants import FPS
 
 
 def main():

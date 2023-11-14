@@ -17,6 +17,7 @@ Draw images. It saves the content to file `data.pickle` when the application is 
 ![Alt text](image-1.png)
 
 # Icons reference
+ - <a href="https://www.flaticon.com/free-icons/line" title="line icons">Line icons created by Freepik - Flaticon</a>
  - <a href="https://www.flaticon.com/free-icons/circle" title="circle icons">Circle icons created by DinosoftLabs - Flaticon</a>
  - <a href="https://www.flaticon.com/free-icons/clean" title="clean icons">Clean icons created by Freepik - Flaticon</a>
  - <a href="https://www.flaticon.com/free-icons/rectangle" title="rectangle icons">Rectangle icons created by PLANBSTUDIO - Flaticon</a>

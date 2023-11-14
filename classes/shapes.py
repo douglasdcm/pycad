@@ -17,3 +17,8 @@ class Rectangle(Shape):
 class Circle(Shape):
     def draw(self, screnn):
         pygame.draw.circle(screnn, "yellow", *self.shape)
+
+
+class Line(Shape):
+    def draw(self, screnn):
+        pygame.draw.line(screnn, "red", *self.shape)

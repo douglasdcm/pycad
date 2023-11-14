@@ -1,9 +1,58 @@
 import pygame
 import pickle
 
-from classes.buttons import RectButton, HelpButton, ClearAllButton, CircleButton
+from classes.buttons import HelpButton, ClearAllButton
+from classes.buttons_shape import RectButton, CircleButton, LineButton
 
 FILE_TO_SAVE = "data.pickle"
+
+
+class Initializer:
+    def init_buttons(self):
+        button_help = HelpButton(index=1)
+        button_rect = RectButton(index=2)
+        button_circle = CircleButton(index=3)
+        button_line = LineButton(index=4)
+        button_clear_all = ClearAllButton(index=5)
+        buttons = [
+            button_clear_all,
+            button_help,
+            button_rect,
+            button_circle,
+            button_line,
+        ]
+
+        for button in buttons:
+            group = pygame.sprite.GroupSingle()
+            group.add(button)
+
+        button_help.press()
+        return buttons
+
+
+class ShapeFactory:
+    def make(self, shapes: [], pressed_button, mouse_positions):
+        shapes_: [] = shapes.copy()
+        if isinstance(pressed_button, RectButton) and len(mouse_positions) == 2:
+            shape = pressed_button.press(mouse_positions)
+            shapes_.append(shape)
+
+        if isinstance(pressed_button, CircleButton) and len(mouse_positions) == 2:
+            shape = pressed_button.press(mouse_positions)
+            shapes_.append(shape)
+
+        if isinstance(pressed_button, LineButton) and len(mouse_positions) == 2:
+            shape = pressed_button.press(mouse_positions)
+            shapes_.append(shape)
+
+        if isinstance(pressed_button, HelpButton):
+            pressed_button.press()
+
+        if isinstance(pressed_button, ClearAllButton):
+            pass
+
+        if len(shapes_) > len(shapes):
+            return shapes_
 
 
 class Canvas:
@@ -11,64 +60,29 @@ class Canvas:
         pygame.init()
         self.__screen = pygame.display.set_mode((500, 500))
         pygame.display.set_caption("PyCAD")
-        self.__buttons_init()
+        self.__buttons = Initializer().init_buttons()
+        self.__shape_factory = ShapeFactory()
         self.pressed_button = None
         self.mouse_positions = []
         self.__shapes = []
 
-    def __buttons_init(self):
-        self.__button_help = HelpButton(index=1)
-        self.__button_rect = RectButton(index=2)
-        self.__button_circle = CircleButton(index=3)
-        self.button_clear_all = ClearAllButton(index=4)
-        self.__buttons = [
-            self.button_clear_all,
-            self.__button_help,
-            self.__button_rect,
-            self.__button_circle,
-        ]
-
-        for button in self.__buttons:
-            group = pygame.sprite.GroupSingle()
-            group.add(button)
-
-        self.__button_help.press()
-
     def clear_all(self):
-        print("Deleted all shapes")
         self.__shapes = []
 
     def check_button_pressed(self, mouse_pos):
-        if self.__button_rect.rect.collidepoint(mouse_pos):
-            self.__button_rect.mark_as_pressed("Rectangle requires two points")
-            self.pressed_button = self.__button_rect
-
-        if self.__button_circle.rect.collidepoint(mouse_pos):
-            self.__button_circle.mark_as_pressed("Circle requires two points")
-            self.pressed_button = self.__button_circle
-
-        if self.__button_help.rect.collidepoint(mouse_pos):
-            self.__button_help.press()
-            self.reset_all()
-
-        if self.button_clear_all.rect.collidepoint(mouse_pos):
-            self.clear_all()
+        for button in self.__buttons:
+            if button.rect.collidepoint(mouse_pos):
+                self.pressed_button = button
+                self.pressed_button.mark_as_pressed()
+                break
 
     def update(self):
-        if (
-            isinstance(self.pressed_button, RectButton)
-            and len(self.mouse_positions) == 2
-        ):
-            shape = self.__button_rect.press(self.mouse_positions)
-            self.__shapes.append(shape)
-            self.mouse_reset()
-        if (
-            isinstance(self.pressed_button, CircleButton)
-            and len(self.mouse_positions) == 2
-        ):
-            shape = self.__button_circle.press(self.mouse_positions)
-            self.__shapes.append(shape)
-            self.mouse_reset()
+        shapes = self.__shape_factory.make(
+            self.__shapes, self.pressed_button, self.mouse_positions
+        )
+        if shapes:
+            self.__shapes = shapes
+            self.reset_all()
 
     def draw(self):
         self.__screen.fill("black")
