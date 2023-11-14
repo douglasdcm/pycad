@@ -12,7 +12,7 @@ $ python main.py
 ```
 
 # Usage
-Draw imgages. It saves the content to file `data.pickle` when the application is closed and reloads it next time the application is opened.
+Draw images. It saves the content to file `data.pickle` when the application is closed and reloads it next time the application is opened.
 
 ![Alt text](image-1.png)
 
