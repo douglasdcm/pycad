@@ -23,7 +23,7 @@ def main():
             if event.type == pygame.KEYDOWN:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_ESCAPE]:
-                    canvas.reset_all()
+                    canvas.reset_all_buttons()
 
         canvas.update()
         canvas.draw()
